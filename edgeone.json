@@ -1,0 +1,27 @@
+{
+  "name": "vibely-chat",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build:pages",
+  "outputDirectory": "./dist",
+  "nodeVersion": "22.11.0",
+  "headers": [
+    {
+      "source": "/assets/*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/admin/assets/*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}

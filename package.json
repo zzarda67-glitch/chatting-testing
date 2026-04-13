@@ -1,0 +1,31 @@
+{
+  "name": "chatting-public-app",
+  "version": "1.0.0",
+  "description": "Production-ready full-stack chat application",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "server": "node server.js",
+    "start": "concurrently \"npm run server\" \"npm run dev\"",
+    "build": "vite build",
+    "build:admin": "npm install --prefix admin-ui && npm run build --prefix admin-ui",
+    "build:pages": "npm run build && npm run build:admin && node scripts/prepare-edgeone-dist.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@insforge/sdk": "^1.2.4",
+    "bcryptjs": "^3.0.1",
+    "chart.js": "^4.5.1",
+    "concurrently": "^9.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.3.2",
+    "express-validator": "^7.3.2",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
+    "vite": "^8.0.8"
+  }
+}
