@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibely Chat | Modern Real-time Messaging</title>
+    <meta name="description" content="A lightweight, responsive WhatsApp-style chat application built with InsForge.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Auth Section -->
+        <div id="auth-container" class="glass-panel">
+            <div class="auth-card">
+                <div class="logo">
+                    <i class="fab fa-whatsapp"></i>
+                    <h1>Vibely<span>Chat</span></h1>
+                </div>
+                <div id="login-form" class="auth-form">
+                    <h2>Welcome Back</h2>
+                    <p>Login to start chatting with your friends.</p>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="login-email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-password" placeholder="Password" required>
+                    </div>
+                    <button id="btn-login" class="btn-primary">Login</button>
+                    <p class="toggle-auth">Don't have an account? <span id="show-signup">Sign Up</span></p>
+                    <div class="divider"><span>OR</span></div>
+                    <div class="oauth-buttons">
+                        <button id="btn-google" class="btn-oauth"><i class="fab fa-google"></i> Google</button>
+                        <button id="btn-github" class="btn-oauth"><i class="fab fa-github"></i> GitHub</button>
+                    </div>
+                </div>
+
+                <div id="signup-form" class="auth-form hidden">
+                    <h2>Create Account</h2>
+                    <p>Join the community and start vibing.</p>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="signup-username" placeholder="Username" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="signup-email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="signup-password" placeholder="Password" required>
+                    </div>
+                    <button id="btn-signup" class="btn-primary">Sign Up</button>
+                    <p class="toggle-auth">Already have an account? <span id="show-login">Login</span></p>
+                </div>
+
+                <div id="verify-form" class="auth-form hidden">
+                    <h2>Verify Email</h2>
+                    <p>We've sent a 6-digit code to your email.</p>
+                    <div class="input-group">
+                        <i class="fas fa-key"></i>
+                        <input type="text" id="verify-code" placeholder="Verification Code" maxlength="6" required>
+                    </div>
+                    <button id="btn-verify" class="btn-primary">Verify Code</button>
+                    <p class="toggle-auth">Didn't get the code? <span id="resend-code">Resend</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Section -->
+        <div id="chat-container" class="hidden">
+            <aside id="sidebar" class="glass-panel">
+                <header class="sidebar-header">
+                    <div class="user-profile">
+                        <img id="my-avatar" src="https://ui-avatars.com/api/?name=User" alt="Profile">
+                        <div class="user-info">
+                            <h3 id="my-username">Username</h3>
+                            <div class="user-meta">
+                                <span class="status online">Online</span>
+                                <a href="/admin" id="admin-link" class="admin-badge hidden" title="Admin Panel">
+                                    <i class="fas fa-shield-halved"></i> Admin
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button type="button" id="btn-theme" title="Toggle dark mode" aria-label="Toggle theme"><i class="fas fa-moon" id="btn-theme-icon"></i></button>
+                        <button type="button" id="btn-logout" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                </header>
+                <div class="search-bar">
+                    <div class="search-input" id="search-input-wrapper">
+                        <i class="fas fa-search" id="search-icon"></i>
+                        <input type="text" id="user-search-input" placeholder="Search users by name or email..." autocomplete="off">
+                        <button id="search-clear-btn" class="search-clear hidden" title="Clear search">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <!-- Telegram-style search dropdown overlay -->
+                    <div id="search-dropdown" class="search-dropdown hidden">
+                        <div id="search-loading" class="search-state hidden">
+                            <div class="search-spinner"></div>
+                            <span>Searching...</span>
+                        </div>
+                        <div id="search-empty" class="search-state hidden">
+                            <i class="fas fa-user-slash"></i>
+                            <span>No users found</span>
+                        </div>
+                        <div id="search-results-list" class="search-results-list"></div>
+                    </div>
+                </div>
+                <div id="chat-list" class="chat-list">
+                    <!-- Chat items will be injected here -->
+                    <div class="chat-item active" data-chat="global">
+                        <img src="https://ui-avatars.com/api/?name=Public+Chat&background=25D366&color=fff" alt="Global">
+                        <div class="chat-details">
+                            <div class="chat-name">
+                                <h3>Global Room</h3>
+                                <span class="time">12:45 PM</span>
+                            </div>
+                            <p class="last-msg">Welcome to Vibely Chat!</p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <main id="chat-window" class="glass-panel">
+                <header class="chat-header">
+                    <div class="chat-info">
+                        <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+                        <img src="https://ui-avatars.com/api/?name=Public+Chat&background=25D366&color=fff" alt="Current Chat">
+                        <div>
+                            <h3>Global Room</h3>
+                            <p>Public messaging for everyone</p>
+                        </div>
+                    </div>
+                    <div class="chat-actions">
+                        <button id="btn-sound" class="sound-toggle" title="Toggle sound notifications">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                        <button id="btn-group" title="Create group"><i class="fas fa-users"></i></button>
+                        <button><i class="fas fa-video"></i></button>
+                        <button><i class="fas fa-phone"></i></button>
+                        <button id="btn-more-actions"><i class="fas fa-ellipsis-v"></i></button>
+                    </div>
+                </header>
+
+                <div id="messages-area" class="messages-area">
+                    <!-- Messages will be injected here -->
+                </div>
+
+                <button type="button" id="btn-scroll-bottom" class="scroll-bottom-btn hidden" aria-label="Scroll to latest messages">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+
+                <div id="typing-container"></div>
+
+                <div id="emoji-popover" class="emoji-popover hidden" role="listbox" aria-label="Emoji picker"></div>
+
+                <div id="edit-message-container" class="edit-message-container hidden">
+                    <span><i class="fas fa-edit"></i> Editing:</span>
+                    <input type="text" id="edit-message-input" placeholder="Edit your message...">
+                    <button id="save-edit-btn" class="btn-save-edit" title="Save"><i class="fas fa-check"></i></button>
+                    <button id="cancel-edit-btn" class="close-edit" title="Cancel"><i class="fas fa-times"></i></button>
+                </div>
+
+                <footer class="chat-footer">
+                    <div class="attachment-btn">
+                        <input type="file" id="image-input" accept="image/*" hidden>
+                        <button type="button" id="btn-attach" title="Attach image"><i class="fas fa-paperclip"></i></button>
+                    </div>
+                    <div class="message-input-container">
+                        <input type="text" id="message-input" placeholder="Type a message… (Ctrl+K search)" autocomplete="off">
+                        <button type="button" id="btn-emoji" title="Emoji"><i class="far fa-smile"></i></button>
+                    </div>
+                    <button type="button" id="btn-send" title="Send"><i class="fas fa-paper-plane"></i></button>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <!-- Notification system -->
+    <div id="toast-container"></div>
+
+    <!-- Group Chat Modal -->
+    <div id="group-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Group Chat</h3>
+                <button id="close-group-modal" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <i class="fas fa-font"></i>
+                    <input type="text" id="group-name" placeholder="Group Name" required>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Select participants:</p>
+                <div id="group-participants" class="participant-select"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-group-btn" class="btn-secondary">Cancel</button>
+                <button id="create-group-btn" class="btn-primary">Create Group</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button for Mobile -->
+    <div class="fab-menu">
+        <button id="fab-new-chat" class="fab-btn secondary" title="New Chat"><i class="fas fa-plus"></i></button>
+        <button id="fab-search" class="fab-btn secondary" title="Search"><i class="fas fa-search"></i></button>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
